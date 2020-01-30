@@ -13,7 +13,7 @@ func createEnquireLink(seq uint32) enquireLink {
 	return pdu
 }
 
-func (pdu *enquireLink) Pack() string {
+func (pdu *enquireLink) Pack() []byte {
 	return pdu.header.Pack()
 }
 
@@ -30,6 +30,6 @@ func createEnquireLinkRESP(seq uint32) enquireLinkRESP {
 	return pdu
 }
 
-func (pdu *enquireLinkRESP) pack() string {
-	return pdu.header.pack()
+func (pdu *enquireLinkRESP) Pack() []byte {
+	return pdu.header.Pack()
 }

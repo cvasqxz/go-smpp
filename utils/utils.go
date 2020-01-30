@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/hex"
 	"encoding/binary"
 	"log"
 )
@@ -15,4 +16,10 @@ func errorHandler(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func Hex2Byte(s string) []byte {
+	packet, err := hex.DecodeString(s)
+	errorHandler(err)
+	return packet
 }

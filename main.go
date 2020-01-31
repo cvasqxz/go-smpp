@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/cvasqxz/go-smpp/pdu"
@@ -20,7 +21,7 @@ func SendEnquireLink(readwriter *bufio.ReadWriter) {
 		readwriter.Write(enquireLink.PackEnquireLink())
 		readwriter.Flush()
 
-		log.Println("SEND", sequence, "-> enquireLink")
+		log.Println("SEND", sequence, "-> enquire_link")
 	}
 }
 
@@ -56,8 +57,14 @@ func main() {
 
 	for {
 		recv := <-channel
+
 		recvHeader := pdu.ParseHeader(recv)
 		sequence = recvHeader.GetSequence()
 		log.Println("RECV", sequence, "<-", recvHeader.GetCommandID())
+
+		if !strings.HasSuffix(recvHeader.GetCommandID(), "_resp") {
+			log.Println("acá hay que responder algo")
+		}
+
 	}
 }

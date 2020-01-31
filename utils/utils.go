@@ -1,9 +1,10 @@
 package utils
 
 import (
-	"encoding/hex"
+	"bufio"
 	"encoding/binary"
 	"log"
+	"net"
 )
 
 func Int2byte(i uint32) []byte {
@@ -12,14 +13,22 @@ func Int2byte(i uint32) []byte {
 	return buffer
 }
 
-func errorHandler(err error) {
+func ErrorHandler(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func Hex2Byte(s string) []byte {
-	packet, err := hex.DecodeString(s)
-	errorHandler(err)
-	return packet
+func Byte2int(slice []byte) uint32 {
+	data := uint32(0)
+	for _, b := range slice {
+		data = (data << 8) | uint32(b)
+	}
+	return data
+}
+
+func OpenConn(addr string) (*bufio.ReadWriter, error) {
+	log.Println("Dial " + addr)
+	conn, err := net.Dial("tcp", addr)
+	return bufio.NewReadWriter(bufio.NewReader(conn), bufio.NewWriter(conn)), err
 }

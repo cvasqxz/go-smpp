@@ -1,4 +1,4 @@
-package structs
+package pdu
 
 type replaceSmResp struct {
 	header Header

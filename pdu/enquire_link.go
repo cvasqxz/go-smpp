@@ -1,10 +1,10 @@
-package structs
+package pdu
 
 type enquireLink struct {
 	header Header
 }
 
-func createEnquireLink(seq uint32) enquireLink {
+func CreateEnquireLink(seq uint32) enquireLink {
 	pdu := enquireLink{}
 	pdu.header.length = 16
 	pdu.header.commandID = "enquire_link"
@@ -21,7 +21,7 @@ type enquireLinkRESP struct {
 	header Header
 }
 
-func createEnquireLinkRESP(seq uint32) enquireLinkRESP {
+func CreateEnquireLinkRESP(seq uint32) enquireLinkRESP {
 	pdu := enquireLinkRESP{}
 	pdu.header.length = 16
 	pdu.header.commandID = "enquire_link_resp"

@@ -1,8 +1,10 @@
-package structs
+package pdu
 
 import (
-	"github.com/cvasqxz/go-smpp/variables"
+	"encoding/hex"
+
 	"github.com/cvasqxz/go-smpp/utils"
+	"github.com/cvasqxz/go-smpp/variables"
 )
 
 type Header struct {
@@ -20,4 +22,15 @@ func (header *Header) Pack() []byte {
 	buffer = append(buffer, variables.Status[header.status]...)
 	buffer = append(buffer, utils.Int2byte(header.sequence)...)
 	return buffer
+}
+
+func ParseHeader(bin_packet []byte) Header {
+	header := Header{}
+
+	header.length = utils.Byte2int(bin_packet[0:4])
+	header.commandID = variables.CommandsHex[hex.EncodeToString(bin_packet[4:8])]
+	header.status = variables.StatusHex[hex.EncodeToString(bin_packet[8:12])]
+	header.sequence = utils.Byte2int(bin_packet[12:16])
+
+	return header
 }

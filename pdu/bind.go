@@ -1,4 +1,4 @@
-package structs
+package pdu
 
 import (
 	"github.com/cvasqxz/go-smpp/variables"
@@ -41,7 +41,7 @@ func CreateBind(command string, sequence uint32, systemID string, password strin
 	pdu.addrNPI = variables.NumericPlanIndicator[addrNPI]
 	pdu.addressRange = []byte{255}
 
-	pdu.header.length = uint32(16 + len(password) + len(systemID) + len(systemType) + 4)
+	pdu.header.length = uint32(16 + len(pdu.password) + len(pdu.systemID) + len(pdu.systemType) + 4)
 
 	return pdu
 }

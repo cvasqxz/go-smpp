@@ -13,18 +13,18 @@ func Int2byte(i uint32) []byte {
 	return buffer
 }
 
-func ErrorHandler(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 func Byte2int(slice []byte) uint32 {
 	data := uint32(0)
 	for _, b := range slice {
 		data = (data << 8) | uint32(b)
 	}
 	return data
+}
+
+func ErrorHandler(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func OpenConn(addr string) (*bufio.ReadWriter, error) {

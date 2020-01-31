@@ -24,6 +24,13 @@ func (header *Header) Pack() []byte {
 	return buffer
 }
 
+func (header *Header) GetCommandID() string {
+	return header.commandID
+}
+func (header *Header) GetSequence() uint32 {
+	return header.sequence
+}
+
 func ParseHeader(bin_packet []byte) Header {
 	header := Header{}
 

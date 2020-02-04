@@ -20,7 +20,7 @@ type deliverSM struct {
 	replaceIfPresentFlag []byte
 	dataCoding           []byte
 	smDefaultMsgID       []byte
-	smLength             []byte
+	smLength             uint32
 	shortMessage         string
 }
 
@@ -56,10 +56,22 @@ func CreateDeliverSM(seq uint32, serviceType string,
 		pdu.destinationAddr = destinationAddr + "\x00"
 	}
 
+	pdu.esmClass = []byte{0}
+	pdu.protocolID = []byte{0}
+	pdu.priorityFlag = []byte{0}
+	pdu.scheduleDeliveryTime = []byte{0}
+	pdu.validityPeriod = []byte{0}
+	pdu.registeredDelivery = []byte{0}
+	pdu.replaceIfPresentFlag = []byte{0}
+	pdu.dataCoding = []byte{0}
+	pdu.smDefaultMsgID = []byte{0}
+	pdu.smLength = uint32(len(shortMessage))
+
 	if len(shortMessage) <= 254 {
 		pdu.shortMessage = shortMessage
 	}
 
+	pdu.header.length = uint32(16 + len(pdu.serviceType) + 2 + len(pdu.sourceAddr) + 2 + len(pdu.destinationAddr) + 10)
 }
 
 func CreateDeliverSMRESP(seq uint32) deliverSMRESP {

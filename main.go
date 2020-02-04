@@ -12,7 +12,7 @@ import (
 
 var sequence uint32
 
-func SendEnquireLink(readwriter *bufio.ReadWriter) {
+func sendEnquireLink(readwriter *bufio.ReadWriter) {
 	for {
 		time.Sleep(10 * time.Second)
 
@@ -23,14 +23,14 @@ func SendEnquireLink(readwriter *bufio.ReadWriter) {
 		}
 
 		enquireLink := pdu.CreateEnquireLink("enquire_link", sequence)
-		readwriter.Write(enquireLink.PackEnquireLink())
+		readwriter.Write(enquireLink.Pack())
 		readwriter.Flush()
 
 		log.Println("SEND", sequence, "-> enquire_link")
 	}
 }
 
-func GetResponses(readwriter *bufio.ReadWriter, channel chan []byte) {
+func getResponses(readwriter *bufio.ReadWriter, channel chan []byte) {
 	for {
 		lenBuffer := make([]byte, 4)
 		_, err := readwriter.Read(lenBuffer)
@@ -52,13 +52,13 @@ func main() {
 
 	// send bind_receiver
 	bindPacket := pdu.CreateBind("receiver", sequence, "ID666", "CESAR", "Hola.123", "3.4", "unknown", "unknown")
-	readwriter.Write(bindPacket.PackBind())
+	readwriter.Write(bindPacket.Pack())
 	readwriter.Flush()
 	log.Println("SEND", sequence, "-> bind_receiver")
 
 	// go DoSomething(readwriter, channel)
-	go SendEnquireLink(readwriter)
-	go GetResponses(readwriter, channel)
+	go sendEnquireLink(readwriter)
+	go getResponses(readwriter, channel)
 
 	for {
 		recv := <-channel
@@ -75,16 +75,19 @@ func main() {
 			switch recvHeader.GetCommandID() {
 			case "enquire_link":
 				enquireLink := pdu.CreateEnquireLink("enquire_link_resp", sequence)
-				readwriter.Write(enquireLink.PackEnquireLink())
+				readwriter.Write(enquireLink.Pack())
 
 			case "deliver_sm":
 				deliverSMRESP := pdu.CreateDeliverSMRESP(sequence)
 				readwriter.Write(deliverSMRESP.Pack())
+
+			case "unbind":
+				unbindRESP := pdu.CreateUnbind("unbind_resp", sequence)
+				readwriter.Write(unbindRESP.Pack())
 			}
 
 			readwriter.Flush()
 			log.Println("SEND", sequence, "->", posibleResponse)
 		}
-
 	}
 }

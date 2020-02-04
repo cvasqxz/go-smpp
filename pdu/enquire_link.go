@@ -13,6 +13,6 @@ func CreateEnquireLink(enquire_type string, seq uint32) enquireLink {
 	return pdu
 }
 
-func (pdu *enquireLink) PackEnquireLink() []byte {
+func (pdu *enquireLink) Pack() []byte {
 	return pdu.header.Pack()
 }

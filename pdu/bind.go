@@ -46,7 +46,7 @@ func CreateBind(command string, sequence uint32, systemID string, password strin
 	return pdu
 }
 
-func (pdu *bind) PackBind() []byte {
+func (pdu *bind) Pack() []byte {
 	var buffer []byte
 	buffer = append(buffer, pdu.header.Pack()...)
 	buffer = append(buffer, []byte(pdu.systemID)...)
@@ -63,10 +63,16 @@ type unbind struct {
 	header Header
 }
 
-type unbindRESP struct {
-	header Header
+func CreateUnbind(command string, seq uint32) unbind {
+	pdu := unbind{}
+	pdu.header.length = 16
+	pdu.header.commandID = command
+	pdu.header.status = "ROK"
+	pdu.header.sequence = seq
+	return pdu
+
 }
 
-func (pdu *unbind) PackUnbind() []byte {
+func (pdu *unbind) Pack() []byte {
 	return pdu.header.Pack()
 }

@@ -92,33 +92,6 @@ type unsuccessSme struct {
 	errorStatusCode []byte
 }
 
-type deliverSm struct {
-	header               Header
-	serviceType          string
-	sourceAddrTON        []byte
-	sourceAddrNPI        []byte
-	sourceAddr           string
-	destAddrTON          []byte
-	destAddrNPI          []byte
-	destinationAddr      string
-	esmClass             []byte
-	protocolID           []byte
-	priorityFlag         []byte
-	scheduleDeliveryTime string
-	validityPeriod       string
-	registeredDelivery   []byte
-	replaceIfPresentFlag []byte
-	dataCoding           []byte
-	smDefaultMsgID       []byte
-	smLength             []byte
-	shortMessage         string
-}
-
-type deliverSmRESP struct {
-	header    Header
-	messageID string
-}
-
 type dataSm struct {
 	header             Header
 	serviceType        string

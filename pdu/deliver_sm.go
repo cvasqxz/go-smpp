@@ -1,5 +1,7 @@
 package pdu
 
+import "github.com/cvasqxz/go-smpp/variables"
+
 type deliverSM struct {
 	header               Header
 	serviceType          string
@@ -27,7 +29,10 @@ type deliverSMRESP struct {
 	messageID []byte
 }
 
-func CreateDeliverSM(seq uint32, serviceType string, sourceAddr string, destinationAddr string, shortMessage string) {
+func CreateDeliverSM(seq uint32, serviceType string,
+	sourceAddrTON string, sourceAddrNPI string, sourceAddr string,
+	destAddrNPI string, destAddrTON string, destinationAddr string,
+	shortMessage string) {
 	pdu := deliverSM{}
 	pdu.header.commandID = "deliver_sm"
 	pdu.header.sequence = seq
@@ -37,9 +42,15 @@ func CreateDeliverSM(seq uint32, serviceType string, sourceAddr string, destinat
 		pdu.serviceType = serviceType + "\x00"
 	}
 
+	pdu.sourceAddrTON = variables.TypeOfNumber[sourceAddrTON]
+	pdu.sourceAddrNPI = variables.NumericPlanIndicator[sourceAddrNPI]
+
 	if len(sourceAddr) <= 20 {
 		pdu.sourceAddr = sourceAddr + "\x00"
 	}
+
+	pdu.destAddrTON = variables.TypeOfNumber[destAddrTON]
+	pdu.destAddrNPI = variables.NumericPlanIndicator[destAddrNPI]
 
 	if len(destinationAddr) <= 20 {
 		pdu.destinationAddr = destinationAddr + "\x00"
